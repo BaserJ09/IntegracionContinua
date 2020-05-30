@@ -17,6 +17,8 @@
 	
 			<link rel="canonical" href="https://www.clima.com/colombia">
 	
+	
+	
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
@@ -346,6 +348,46 @@
   </footer><!-- End #footer -->
 
   <!-- Vendor JS Files -->
+	<script>
+    window.adsConsent = (callback) => {
+        const didomiPromise = new Promise(
+            function (resolve, reject) {
+                let i = 0;
+                const checkDidomi = setInterval(function () {
+                    if (typeof(Didomi) === "object") {
+                        resolve();
+                        clearInterval(checkDidomi);
+                    }
+
+                    i++;
+                    if (i > 50)  clearInterval(checkDidomi);
+                }, 10);
+            }
+        );
+
+        didomiPromise.then(function () {
+            console.log("ads consent (utils) V2: " + getConsent() + ' fue por adsconsent');
+            return getConsent();
+        });
+    }
+
+    window.getConsent = () => {
+        const personalizedAdsDefault = (Didomi.isConsentRequired() !== true);
+        if (!Didomi.isUserConsentStatusPartial() &&
+            Didomi.getUserConsentStatusForPurpose('advertising_personalization') !== undefined
+        ) {
+            return Didomi.getUserConsentStatusForPurpose('advertising_personalization');
+        }
+
+        console.log("ads consent (utils) V2: " + personalizedAdsDefault + ' fue por getconsent')
+        return personalizedAdsDefault;
+
+    }
+
+    window.checkDidomi = () => {
+        return typeof(Didomi) === 'object' ? getConsent() : adsConsent()
+    };
+</script>
   <script src="assets/vendor/jquery/jquery.min.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
